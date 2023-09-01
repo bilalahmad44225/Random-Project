@@ -64,6 +64,7 @@ public class CardManager : MonoBehaviour
                 yield return new WaitForSeconds(0.01f);
             }
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            soundmanager.Instance.PlaySoundEffect("flip");
             facedUp = !facedUp;
             CheckMove();
         }
@@ -80,6 +81,7 @@ public class CardManager : MonoBehaviour
                 yield return new WaitForSeconds(0.01f);
             }
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            soundmanager.Instance.PlaySoundEffect("flip");
             facedUp = !facedUp;
         }
 
@@ -124,6 +126,7 @@ public class CardManager : MonoBehaviour
                 }
                 yield return new WaitForSeconds(0.01f);
             }
+            soundmanager.Instance.PlaySoundEffect("flip");
             yield return new WaitForSeconds(1.5f);
             for (float i = 180f; i >= 0f; i -= 10f)
             {
@@ -134,6 +137,7 @@ public class CardManager : MonoBehaviour
                 }
                 yield return new WaitForSeconds(0.01f);
             }
+            soundmanager.Instance.PlaySoundEffect("flip");
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
     }
 
@@ -154,17 +158,15 @@ public class CardManager : MonoBehaviour
             }
             if(gamecontroller.Instance.PreviousMove!=null && gamecontroller.Instance.CurrentMove.sprite==gamecontroller.Instance.PreviousMove.sprite && gamecontroller.Instance.CurrentMove.gameObject!=gamecontroller.Instance.PreviousMove.gameObject)
             {
+                StartCoroutine(GameSoundEffectDelay("correct"));
+                // soundmanager.Instance.PlaySoundEffect("correct");
                 gamecontroller.Instance.AddScore();
                 gamecontroller.Instance.AddMoves();
-                gamecontroller.Instance.CurrentMove.gameObject.SetActive(false);
-                gamecontroller.Instance.PreviousMove.gameObject.SetActive(false);
-                gamecontroller.Instance.CurrentMove=null;
-                gamecontroller.Instance.PreviousMove=null;
-                gamecontroller.Instance.CheckRemainingCards();
             }
             else if(gamecontroller.Instance.PreviousMove!=null && gamecontroller.Instance.CurrentMove.sprite!=gamecontroller.Instance.PreviousMove.sprite && gamecontroller.Instance.CurrentMove.gameObject!=gamecontroller.Instance.PreviousMove.gameObject)
             {
-                // gamecontroller.Instance.AddScore();
+                StartCoroutine(GameSoundEffectDelay("wrong"));
+                // soundmanager.Instance.PlaySoundEffect("wrong");
                 gamecontroller.Instance.AddMoves();
                 StartCoroutine(gamecontroller.Instance.PreviousMove.gameObject.GetComponent<CardManager>().RotateCardBack());
                 StartCoroutine(RotateCardBack());
@@ -190,8 +192,29 @@ public class CardManager : MonoBehaviour
                 yield return new WaitForSeconds(0.01f);
             }
             transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            soundmanager.Instance.PlaySoundEffect("flip");
             facedUp = !facedUp;
         }
         coroutineAllowed = true;   
+    }
+
+    // sound effect delay
+    IEnumerator GameSoundEffectDelay(string name)
+    {
+        yield return new WaitForSeconds(1f);
+        switch(name)
+        {
+            case "wrong":
+            soundmanager.Instance.PlaySoundEffect("wrong");
+            break;
+            case "correct":
+            soundmanager.Instance.PlaySoundEffect("correct");
+            gamecontroller.Instance.CurrentMove.gameObject.SetActive(false);
+            gamecontroller.Instance.PreviousMove.gameObject.SetActive(false);
+            gamecontroller.Instance.CurrentMove=null;
+            gamecontroller.Instance.PreviousMove=null;
+            gamecontroller.Instance.CheckRemainingCards();
+            break;
+        }
     }
 }

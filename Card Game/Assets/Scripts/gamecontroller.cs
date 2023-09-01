@@ -170,7 +170,7 @@ public class gamecontroller : MonoBehaviour
         CardMoves+=1;
         Game.MovesText.text="Moves: "+CardMoves;
     }
-
+    //Check for remaining cards
     public void CheckRemainingCards()
     {
         CardManager[] Cards=Game.CardsList;
@@ -183,6 +183,13 @@ public class gamecontroller : MonoBehaviour
         if(remaingcards==0)
         {
             GameOver.GameOverScreen.SetActive(true);
+            StartCoroutine(GameOverSoundEffectDelay());
         }
+    }
+    // sound effect delay
+    IEnumerator GameOverSoundEffectDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        soundmanager.Instance.PlaySoundEffect("over");
     }
 }
