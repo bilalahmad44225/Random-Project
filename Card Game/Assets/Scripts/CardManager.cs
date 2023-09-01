@@ -9,7 +9,6 @@ public class CardManager : MonoBehaviour
 
     [SerializeField]
     public Sprite faceSprite, backSprite;
-    [SerializeField]
     private bool coroutineAllowed, facedUp;
 
     private RectTransform parentCanvas,imageToCheck;
@@ -33,12 +32,6 @@ public class CardManager : MonoBehaviour
         facedUp = false;
     }
 
-    private void OnMouseDown() {
-        if (coroutineAllowed)
-        {
-            StartCoroutine(RotateCard());
-        }
-    }
     // rotate card call from button
     public void TurnOverCard()
     {
@@ -47,7 +40,7 @@ public class CardManager : MonoBehaviour
             StartCoroutine(RotateCard());
         }
     }
-
+    // Rotate card Effect
     private IEnumerator RotateCard()
     {
         coroutineAllowed = false;
@@ -86,8 +79,6 @@ public class CardManager : MonoBehaviour
         }
 
         coroutineAllowed = true;
-
-        // facedUp = !facedUp;
     }
 
     // check if card is in canvas view or not
@@ -144,8 +135,6 @@ public class CardManager : MonoBehaviour
 // Check the move if correct or wrong
     void CheckMove()
     {
-        //if(gamecontroller.Instance.PreviousMove==null)
-        {
             if(gamecontroller.Instance.CurrentMove!=null && gamecontroller.Instance.CurrentMove.gameObject!=this.gameObject)
             {
                 gamecontroller.Instance.PreviousMove=gamecontroller.Instance.CurrentMove;
@@ -159,21 +148,18 @@ public class CardManager : MonoBehaviour
             if(gamecontroller.Instance.PreviousMove!=null && gamecontroller.Instance.CurrentMove.sprite==gamecontroller.Instance.PreviousMove.sprite && gamecontroller.Instance.CurrentMove.gameObject!=gamecontroller.Instance.PreviousMove.gameObject)
             {
                 StartCoroutine(GameSoundEffectDelay("correct"));
-                // soundmanager.Instance.PlaySoundEffect("correct");
                 gamecontroller.Instance.AddScore();
                 gamecontroller.Instance.AddMoves();
             }
             else if(gamecontroller.Instance.PreviousMove!=null && gamecontroller.Instance.CurrentMove.sprite!=gamecontroller.Instance.PreviousMove.sprite && gamecontroller.Instance.CurrentMove.gameObject!=gamecontroller.Instance.PreviousMove.gameObject)
             {
                 StartCoroutine(GameSoundEffectDelay("wrong"));
-                // soundmanager.Instance.PlaySoundEffect("wrong");
                 gamecontroller.Instance.AddMoves();
                 StartCoroutine(gamecontroller.Instance.PreviousMove.gameObject.GetComponent<CardManager>().RotateCardBack());
                 StartCoroutine(RotateCardBack());
                 gamecontroller.Instance.CurrentMove=null;
                 gamecontroller.Instance.PreviousMove=null;
             }
-        }
     }
 
     //Rotateback if wrong attempt for previous card

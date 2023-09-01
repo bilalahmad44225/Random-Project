@@ -55,12 +55,6 @@ public class gamecontroller : MonoBehaviour
         Instance=this;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // Play Button Action
     public void GameStart()
     {

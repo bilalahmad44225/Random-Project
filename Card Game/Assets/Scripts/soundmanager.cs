@@ -21,12 +21,7 @@ public class soundmanager : MonoBehaviour
     {
         Instance=this;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
     // Play specific audio 
     public void PlaySoundEffect(string audioname)
     {
